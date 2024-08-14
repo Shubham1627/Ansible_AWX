@@ -1,0 +1,6 @@
+---
+- name: Install OpenSSL on RPM-based systems
+  ansible.builtin.package:
+    name: openssl
+    state: present
+

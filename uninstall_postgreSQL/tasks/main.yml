@@ -1,0 +1,57 @@
+---
+- name: Check if PostgreSQL is installed
+  ansible.builtin.shell: |
+    rpm -q postgresql-server
+  register: postgresql_installed
+  ignore_errors: yes
+
+- name: Debug PostgreSQL installation check
+  ansible.builtin.debug:
+    msg: "PostgreSQL installed check result: {{ postgresql_installed }}"
+
+- name: Stop PostgreSQL service
+  ansible.builtin.service:
+    name: postgresql
+    state: stopped
+  when: postgresql_installed.rc == 0
+
+- name: Disable PostgreSQL service
+  ansible.builtin.service:
+    name: postgresql
+    enabled: no
+  when: postgresql_installed.rc == 0
+
+- name: Uninstall PostgreSQL packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - postgresql
+    - postgresql-server
+    - postgresql-contrib
+    - postgresql-libs
+    - postgresql-client
+    - postgresql-devel
+  when: postgresql_installed.rc == 0
+
+- name: Remove PostgreSQL data directory
+  ansible.builtin.file:
+    path: /var/lib/pgsql
+    state: absent
+    recurse: yes
+  when: postgresql_installed.rc == 0
+
+- name: Remove PostgreSQL configuration files
+  ansible.builtin.file:
+    path: /etc/postgresql
+    state: absent
+    recurse: yes
+  when: postgresql_installed.rc == 0
+
+- name: Remove PostgreSQL log files
+  ansible.builtin.file:
+    path: /var/log/postgresql
+    state: absent
+    recurse: yes
+  when: postgresql_installed.rc == 0
+

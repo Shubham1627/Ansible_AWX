@@ -1,0 +1,4 @@
+- name: Upgrade Java JDK
+  ansible.builtin.yum:
+    name: "{{ Java_upgraded_version }}"
+    state: latest

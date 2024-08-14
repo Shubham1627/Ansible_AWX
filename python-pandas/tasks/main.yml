@@ -1,0 +1,7 @@
+---
+
+- name: Install pandas Python library
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ python_lib }}"

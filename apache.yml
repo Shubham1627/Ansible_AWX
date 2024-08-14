@@ -1,0 +1,25 @@
+---
+- name: Ensure DNS is configured and install Apache on RHEL 8
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: present
+      tags:
+        - install
+        - ngin
+
+    - name: Start and enable Apache service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Ensure firewall is allowing HTTP traffic
+      firewalld:
+        service: http
+        permanent: yes
+        state: enabled
+        immediate: yes

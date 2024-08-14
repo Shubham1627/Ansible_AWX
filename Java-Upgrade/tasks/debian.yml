@@ -1,0 +1,9 @@
+# [ ]  Check when run on actual debian
+- name: Update APT cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Upgrade Java JDK
+  ansible.builtin.apt:
+    name: adoptopenjdk-17-hotspot
+    state: latest
