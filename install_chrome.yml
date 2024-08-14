@@ -1,0 +1,9 @@
+---
+- name: Chrome browser
+  hosts: all
+  become: yes
+  vars:
+    chrome_state: "present"
+  roles:
+    - chrome
+
