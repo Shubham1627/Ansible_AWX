@@ -1,2 +1,28 @@
 ---
 # tasks file for apache
+- name: Install package  httpd
+  ansible.builtin.dnf:
+    name: httpd
+    state: present
+
+- name: Start the service
+  ansible.builtin.service:
+    name: httpd
+    state: started
+    enabled: true
+
+- name: Allow firewall access
+  ansible.posix.firewalld:
+    service: http
+    state: enabled
+    immediate: yes
+    permanent: yes
+   
+- name: Add web content
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+  notify:
+    - Restart_httpd
+
+ 

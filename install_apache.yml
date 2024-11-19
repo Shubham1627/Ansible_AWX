@@ -1,0 +1,6 @@
+---
+  - name: Host web application using appache httpd
+    hosts: all
+    roles:
+      - apache
+
