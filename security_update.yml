@@ -1,0 +1,17 @@
+---
+  - name: Security Patching
+    hosts: all
+    become: yes
+    tasks:
+      - name: Check for available security updates
+        command: dnf updateinfo list security
+        register: security_updates
+        changed_when: false
+
+      - name: set variable
+        ansible.builtin.set_fact:
+          security_updates: "{{ security_updates }}"
+
+      - name: Display Updates
+        ansible.builtin.debug:
+          msg: "{{ security_updates.stdout }}"
